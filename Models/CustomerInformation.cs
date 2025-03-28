@@ -13,8 +13,6 @@ public partial class CustomerInformation
 
     public DateTime CreatedAt { get; set; }
 
-    public virtual ICollection<Auth> Auths { get; set; } = new List<Auth>();
-
     public virtual ICollection<CardInformation> CardInformations { get; set; } = new List<CardInformation>();
 
     public virtual ICollection<TransactionHistory> TransactionHistories { get; set; } = new List<TransactionHistory>();

@@ -13,3 +13,6 @@ Se diseñó la base de datos y la aplicación con expectativas de escalabilidad 
 
 **Diagrama entidad relación**
 ![ATM (1)](https://github.com/user-attachments/assets/3541a4f7-fc51-4baa-8caa-ab68054b946f)
+
+
+- Challenge iniciado en la fecha 25/3

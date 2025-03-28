@@ -7,13 +7,13 @@ public partial class Auth
 {
     public long Id { get; set; }
 
-    public Guid? CustomerId { get; set; }
-
     public string? HashedPin { get; set; }
 
     public DateTime CreatedAt { get; set; }
 
-    public virtual CustomerInformation? Customer { get; set; }
+    public int? CardNumber { get; set; }
+
+    public virtual CardInformation? CardNumberNavigation { get; set; }
 
     public virtual ICollection<Token> Tokens { get; set; } = new List<Token>();
 }

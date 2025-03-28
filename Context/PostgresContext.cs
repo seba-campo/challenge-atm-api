@@ -22,6 +22,8 @@ public partial class PostgresContext : DbContext
 
     public virtual DbSet<CustomerInformation> CustomerInformations { get; set; }
 
+    public virtual DbSet<FailedLoginAttempt> FailedLoginAttempts { get; set; }
+
     public virtual DbSet<Token> Tokens { get; set; }
 
     public virtual DbSet<TransactionHistory> TransactionHistories { get; set; }
@@ -29,18 +31,8 @@ public partial class PostgresContext : DbContext
     public virtual DbSet<TransactionType> TransactionTypes { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        if (!optionsBuilder.IsConfigured)
-        {
-            var configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json")
-                .Build();
-
-            var connectionString = configuration.GetConnectionString("DefaultConnection");
-            optionsBuilder.UseNpgsql(connectionString);
-        }
-    }
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseNpgsql("Host=aws-0-sa-east-1.pooler.supabase.com;Port=6543;Database=postgres;Username=postgres.aotmrixxmjijoehpxfop;Password=Agy1GfZYileyAxNK;SSL Mode=Require;Trust Server Certificate=true");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -69,31 +61,38 @@ public partial class PostgresContext : DbContext
             entity.ToTable("Auth");
 
             entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.CreatedAt)
-                .HasDefaultValueSql("now()")
-                .HasColumnName("created_at");
-            entity.Property(e => e.CustomerId).HasColumnName("customerId");
-            entity.Property(e => e.HashedPin)
-                .HasColumnType("character varying")
-                .HasColumnName("hashedPin");
-
-            entity.HasOne(d => d.Customer).WithMany(p => p.Auths)
-                .HasForeignKey(d => d.CustomerId)
-                .HasConstraintName("Auth_customerId_fkey");
-        });
-
-        modelBuilder.Entity<CardInformation>(entity =>
-        {
-            entity.HasKey(e => e.Id).HasName("CardInformation_pkey");
-
-            entity.ToTable("CardInformation");
-
-            entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.CardNumber).HasColumnName("cardNumber");
             entity.Property(e => e.CreatedAt)
                 .HasDefaultValueSql("now()")
                 .HasColumnName("created_at");
+            entity.Property(e => e.HashedPin)
+                .HasColumnType("character varying")
+                .HasColumnName("hashedPin");
+
+            entity.HasOne(d => d.CardNumberNavigation).WithMany(p => p.Auths)
+                .HasForeignKey(d => d.CardNumber)
+                .HasConstraintName("Auth_cardNumber_fkey");
+        });
+
+        modelBuilder.Entity<CardInformation>(entity =>
+        {
+            entity.HasKey(e => e.CardNumber).HasName("CardInformation_pkey");
+
+            entity.ToTable("CardInformation");
+
+            entity.Property(e => e.CardNumber)
+                .ValueGeneratedNever()
+                .HasColumnName("cardNumber");
+            entity.Property(e => e.CreatedAt)
+                .HasDefaultValueSql("now()")
+                .HasColumnName("created_at");
             entity.Property(e => e.CustomerId).HasColumnName("customerId");
+            entity.Property(e => e.Id)
+                .ValueGeneratedOnAdd()
+                .HasColumnName("id");
+            entity.Property(e => e.IsBlocked)
+                .HasDefaultValue(false)
+                .HasColumnName("isBlocked");
 
             entity.HasOne(d => d.Customer).WithMany(p => p.CardInformations)
                 .HasForeignKey(d => d.CustomerId)
@@ -116,6 +115,25 @@ public partial class PostgresContext : DbContext
             entity.Property(e => e.UserName)
                 .HasColumnType("character varying")
                 .HasColumnName("userName");
+        });
+
+        modelBuilder.Entity<FailedLoginAttempt>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("FailedLginAttempts_pkey");
+
+            entity.Property(e => e.Id)
+                .HasDefaultValueSql("gen_random_uuid()")
+                .HasColumnName("id");
+            entity.Property(e => e.AttemptCount).HasColumnName("attemptCount");
+            entity.Property(e => e.CardNumber).HasColumnName("cardNumber");
+            entity.Property(e => e.LastAttempt)
+                .HasDefaultValueSql("now()")
+                .HasColumnType("timestamp without time zone")
+                .HasColumnName("lastAttempt");
+
+            entity.HasOne(d => d.CardNumberNavigation).WithMany(p => p.FailedLoginAttempts)
+                .HasForeignKey(d => d.CardNumber)
+                .HasConstraintName("FailedLginAttempts_cardNumber_fkey");
         });
 
         modelBuilder.Entity<Token>(entity =>

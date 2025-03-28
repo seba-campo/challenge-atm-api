@@ -9,9 +9,15 @@ public partial class CardInformation
 
     public Guid? CustomerId { get; set; }
 
-    public int? CardNumber { get; set; }
+    public int CardNumber { get; set; }
 
     public DateTime CreatedAt { get; set; }
 
+    public bool? IsBlocked { get; set; }
+
+    public virtual ICollection<Auth> Auths { get; set; } = new List<Auth>();
+
     public virtual CustomerInformation? Customer { get; set; }
+
+    public virtual ICollection<FailedLoginAttempt> FailedLoginAttempts { get; set; } = new List<FailedLoginAttempt>();
 }
