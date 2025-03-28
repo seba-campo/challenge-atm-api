@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using ChallengeAtmApi.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace ChallengeAtmApi.Models;
+namespace ChallengeAtmApi.Context;
 
 public partial class PostgresContext : DbContext
 {
