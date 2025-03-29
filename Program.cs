@@ -1,5 +1,6 @@
 using ChallengeAtmApi.Context;
 using ChallengeAtmApi.Services;
+using ChallengeAtmApi.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

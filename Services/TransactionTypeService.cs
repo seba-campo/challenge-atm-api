@@ -1,5 +1,6 @@
 ﻿using ChallengeAtmApi.Context;
 using ChallengeAtmApi.Models;
+using ChallengeAtmApi.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 

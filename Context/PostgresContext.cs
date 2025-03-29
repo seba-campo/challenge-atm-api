@@ -88,7 +88,7 @@ public partial class PostgresContext : DbContext
                 .HasColumnName("created_at");
             entity.Property(e => e.CustomerId).HasColumnName("customerId");
             entity.Property(e => e.Id)
-                .ValueGeneratedOnAdd()
+                .HasDefaultValueSql("gen_random_uuid()")
                 .HasColumnName("id");
             entity.Property(e => e.IsBlocked)
                 .HasDefaultValue(false)

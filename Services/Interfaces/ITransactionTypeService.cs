@@ -1,7 +1,7 @@
 ﻿using ChallengeAtmApi.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ChallengeAtmApi.Services
+namespace ChallengeAtmApi.Services.Interfaces
 {
     public interface ITransactionTypeService
     {

@@ -1,6 +1,6 @@
 ﻿using ChallengeAtmApi.Context;
 using ChallengeAtmApi.Models;
-using ChallengeAtmApi.Services;
+using ChallengeAtmApi.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics.Eventing.Reader;
