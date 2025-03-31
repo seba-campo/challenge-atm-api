@@ -13,10 +13,11 @@ namespace ChallengeAtmApi.Services
         {
             _context = context;
         }
-        public async Task<ActionResult<IEnumerable<TransactionType>>> GetAllTransactionType()
+        public async Task<IEnumerable<TransactionType>> GetAllTransactionType()
         {
             // Obtén todos los registros de la tabla "Auth"
-            return await _context.TransactionTypes.ToListAsync();
+            var transactionTypes = await _context.TransactionTypes.ToListAsync();
+            return transactionTypes;
         }
         public async Task<TransactionType?> GetTransactionTypeById(Guid id)
         {

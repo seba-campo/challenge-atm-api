@@ -14,6 +14,7 @@ builder.Services.AddDbContext<PostgresContext>(options =>
 
 //Agregar los servicios que se crean para cada Controller:
 builder.Services.AddScoped<ITransactionTypeService, TransactionTypeService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 
 

@@ -7,5 +7,6 @@ namespace ChallengeAtmApi.Services.Interfaces
         Task<Boolean> AuthCardAndPin(int card, string pin);
 
         Task<Auth?> GetAuthByCardNumber(int card);
+        Task<Boolean> IsCardBlocked(int cardNumber);
     }
 }

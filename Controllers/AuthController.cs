@@ -1,4 +1,5 @@
 ﻿using ChallengeAtmApi.DTOs;
+using ChallengeAtmApi.Models;
 using ChallengeAtmApi.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,9 +19,13 @@ namespace ChallengeAtmApi.Controllers
         }
         // GET: api/<AuthController>
         [HttpPost]
-        public async IActionResult Login([FromBody] GetAuthDto request)
+        public async Task<ActionResult<Boolean>> Login([FromBody] GetAuthDto request)
         {
-            return await _authService.AuthCardAndPin(request.cardNumber, request.hashedPin);
+            if(await _authService.AuthCardAndPin(request.cardNumber, request.hashedPin))
+            {
+                return Ok(true);
+            }
+            return BadRequest(false);
         }
         
     }

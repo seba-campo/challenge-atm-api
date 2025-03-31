@@ -5,7 +5,7 @@ namespace ChallengeAtmApi.Services.Interfaces
 {
     public interface ITransactionTypeService
     {
-        Task<ActionResult<IEnumerable<TransactionType>>> GetAllTransactionType();
+        Task<IEnumerable<TransactionType>> GetAllTransactionType();
         Task<TransactionType?> GetTransactionTypeById(Guid id);
     }
 }
