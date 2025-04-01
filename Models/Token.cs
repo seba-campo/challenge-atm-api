@@ -5,13 +5,11 @@ namespace ChallengeAtmApi.Models;
 
 public partial class Token
 {
-    public long Id { get; set; }
+    public Guid Id { get; set; }
 
-    public string? Token1 { get; set; }
+    public Guid Token1 { get; set; }
 
-    public long? AuthId { get; set; }
+    public Guid AuthId { get; set; }
 
-    public DateTime CreatedAt { get; set; }
-
-    public virtual Auth? Auth { get; set; }
+    public virtual Auth Auth { get; set; } = null!;
 }
