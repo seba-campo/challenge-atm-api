@@ -5,8 +5,6 @@ namespace ChallengeAtmApi.Models;
 
 public partial class CardInformation
 {
-    public Guid Id { get; set; }
-
     public int CardNumber { get; set; }
 
     public Guid CustomerId { get; set; }

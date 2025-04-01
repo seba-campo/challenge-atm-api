@@ -46,7 +46,6 @@ public partial class PostgresContext : DbContext
             entity.Property(e => e.HashedPin).HasMaxLength(255);
 
             entity.HasOne(d => d.CardNumberNavigation).WithMany(p => p.Auths)
-                .HasPrincipalKey(p => p.CardNumber)
                 .HasForeignKey(d => d.CardNumber)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("Auth_CardNumber_fkey");
@@ -54,13 +53,13 @@ public partial class PostgresContext : DbContext
 
         modelBuilder.Entity<CardInformation>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("CardInformation_pkey");
+            entity.HasKey(e => e.CardNumber).HasName("CardInformation_pkey");
 
             entity.ToTable("CardInformation");
 
             entity.HasIndex(e => e.CardNumber, "CardInformation_CardNumber_key").IsUnique();
 
-            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.CardNumber).ValueGeneratedNever();
             entity.Property(e => e.IsBlocked).HasDefaultValue(false);
 
             entity.HasOne(d => d.Customer).WithMany(p => p.CardInformations)
@@ -88,7 +87,6 @@ public partial class PostgresContext : DbContext
             entity.Property(e => e.LastAttempt).HasColumnType("timestamp without time zone");
 
             entity.HasOne(d => d.CardNumberNavigation).WithMany(p => p.FailedLoginAttempts)
-                .HasPrincipalKey(p => p.CardNumber)
                 .HasForeignKey(d => d.CardNumber)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FailedLoginAttempts_CardNumber_fkey");
