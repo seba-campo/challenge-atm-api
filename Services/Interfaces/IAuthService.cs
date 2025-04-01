@@ -5,8 +5,8 @@ namespace ChallengeAtmApi.Services.Interfaces
     public interface IAuthService
     {
         Task<Boolean> AuthCardAndPin(int card, string pin);
-
         Task<Auth?> GetAuthByCardNumber(int card);
         Task<Boolean> IsCardBlocked(int cardNumber);
+        Task<FailedLoginAttempt> AddLoginAttempt(int card);
     }
 }
