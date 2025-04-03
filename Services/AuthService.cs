@@ -29,7 +29,8 @@ namespace ChallengeAtmApi.Services
                 {
                     //Buscar si está bloqueada la tarjeta. 
                     if (await IsCardBlocked(card))
-                    { 
+                    {
+
                         return false;
                     }
                     else
@@ -110,7 +111,8 @@ namespace ChallengeAtmApi.Services
                 if (cardInfo.IsBlocked) { return true; }
                 else { return false; }
             }
-            catch(Exception ex){
+            catch (Exception ex)
+            {
                 throw new Exception("Card not found: ", ex);
             }
         }

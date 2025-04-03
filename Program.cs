@@ -48,6 +48,7 @@ builder.Services.AddScoped<ITransactionTypeService, TransactionTypeService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IFailedLoginAttemptService, FailedLoginAttemptService>();
+builder.Services.AddScoped<ICardInformationService, CardInformationService>();
 
 //Agrego el JWT package
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

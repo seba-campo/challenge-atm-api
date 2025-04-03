@@ -8,13 +8,16 @@ namespace ChallengeAtmApi.Services
     public class FailedLoginAttemptService : IFailedLoginAttemptService
     {
         private readonly PostgresContext _context;
-        public FailedLoginAttemptService(PostgresContext context)
+        private readonly ICardInformationService _cardInformationService;
+        public FailedLoginAttemptService(PostgresContext context, ICardInformationService cardInformationService)
         {
             _context = context;
+            _cardInformationService = cardInformationService;
         }
         public async Task<FailedLoginAttempt> AddLoginAttempt(int card)
         {
             var failedLoginAttempt = await _context.FailedLoginAttempts.FirstOrDefaultAsync(f => f.CardNumber == card);
+
             if (failedLoginAttempt == null)
             {
                 failedLoginAttempt = new FailedLoginAttempt
@@ -30,9 +33,15 @@ namespace ChallengeAtmApi.Services
             {
                 failedLoginAttempt.LastAttempt = DateTime.UtcNow;
                 failedLoginAttempt.AttemptCount++;
-                _context.FailedLoginAttempts.Update(failedLoginAttempt);
 
+                if (failedLoginAttempt.AttemptCount > 3)
+                {
+                    await _cardInformationService.SetCardBlockedState(card);
+                }
+
+                _context.FailedLoginAttempts.Update(failedLoginAttempt);
             }
+
             await _context.SaveChangesAsync();
             return failedLoginAttempt;
         }

@@ -27,7 +27,7 @@ namespace ChallengeAtmApi.Controllers
                 var token = await _authService.LogInUser(request.cardNumber);
                 return Ok(new {acessToken= token});
             }
-            return Unauthorized("User not authorized.");
+            return Unauthorized("Invalid credentials or card blocked.");
         }
     }
 }
