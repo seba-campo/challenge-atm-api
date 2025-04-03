@@ -1,4 +1,5 @@
-﻿using ChallengeAtmApi.Context;
+﻿using System.Linq.Expressions;
+using ChallengeAtmApi.Context;
 using ChallengeAtmApi.Models;
 using ChallengeAtmApi.Security;
 using ChallengeAtmApi.Services.Interfaces;
@@ -10,11 +11,13 @@ namespace ChallengeAtmApi.Services
     {
         private readonly PostgresContext _context;
         private readonly ITokenService _tokenService;
+        private readonly IFailedLoginAttemptService _failedLoginAttemptService;
         private Guid authId;
-        public AuthService(PostgresContext context, ITokenService tokenService)
+        public AuthService(PostgresContext context, ITokenService tokenService, IFailedLoginAttemptService failedLoginAttemptService)
         {
             _context = context;
             _tokenService = tokenService;
+            _failedLoginAttemptService = failedLoginAttemptService;
         }
         public async Task<Boolean> AuthCardAndPin(int card, string pin)
             //Valido existencia y coincidencia entre card y pin.
@@ -31,12 +34,14 @@ namespace ChallengeAtmApi.Services
                     }
                     else
                     {
+                        authId = auth.Id;
+                        await _failedLoginAttemptService.ResetLoginAttempt(card);
                         return true;
                     }
                 }
                 else
                 {
-                    await AddLoginAttempt(card);
+                    await _failedLoginAttemptService.AddLoginAttempt(card);
                     return false;
                 }
             };
@@ -66,51 +71,48 @@ namespace ChallengeAtmApi.Services
         }
         private async Task<string?> GetCustomerNameAsync(int cardNumber)
         {
-            var cardInfo = await _context.CardInformations.FirstOrDefaultAsync(c => c.CardNumber == cardNumber);
-            if (cardInfo != null)
+            try
             {
-                var customerInfo = await _context.CustomerInformations.FirstOrDefaultAsync(c => c.Id == cardInfo.CustomerId);
-                return customerInfo.UserName;
+                var cardInfo = await _context.CardInformations.FirstOrDefaultAsync(c => c.CardNumber == cardNumber);
+                if (cardInfo != null)
+                {
+                    var customerInfo = await _context.CustomerInformations.FirstOrDefaultAsync(c => c.Id == cardInfo.CustomerId);
+                    return customerInfo.UserName;
+                }
+                else
+                {
+                    return null;
+                }
             }
-            else
+            catch(Exception ex)
             {
-                return null;
+                throw new Exception("Card not found: ", ex);
             }
         }
         private async Task<Auth?> GetAuthByCardNumber(int cardNumber)
         {
             //return await _context.Auths.FirstOrDefaultAsync(c => c.CardNumber == cardNumber
-            var auth = await _context.Auths.FirstOrDefaultAsync(c => c.CardNumber == cardNumber);
-            return auth;
+            try
+            {
+                var auth = await _context.Auths.FirstOrDefaultAsync(c => c.CardNumber == cardNumber);
+                return auth;
+            }
+            catch(Exception ex)
+            {
+                throw new Exception("Card not found: ", ex);
+            }
         }
         private async Task<Boolean> IsCardBlocked(int cardNumber)
         {
-            var cardInfo = await _context.CardInformations.FirstOrDefaultAsync(c => c.CardNumber == cardNumber);
-            if (cardInfo.IsBlocked) { return true; }
-            else { return false; }
-        }
-        private async Task<FailedLoginAttempt> AddLoginAttempt(int card)
-        {
-            var failedLoginAttempt = await _context.FailedLoginAttempts.FirstOrDefaultAsync(f => f.CardNumber == card);
-            if (failedLoginAttempt == null) {
-                failedLoginAttempt = new FailedLoginAttempt
-                {
-                    Id = Guid.NewGuid(),
-                    CardNumber = card,
-                    AttemptCount = 1,
-                    LastAttempt = DateTime.UtcNow
-                };
-                _context.FailedLoginAttempts.Add(failedLoginAttempt);
-            }
-            else
+            try
             {
-                failedLoginAttempt.LastAttempt = DateTime.UtcNow;
-                failedLoginAttempt.AttemptCount++;
-                _context.FailedLoginAttempts.Update(failedLoginAttempt);
-                
+                var cardInfo = await _context.CardInformations.FirstOrDefaultAsync(c => c.CardNumber == cardNumber);
+                if (cardInfo.IsBlocked) { return true; }
+                else { return false; }
             }
-            await _context.SaveChangesAsync();
-            return failedLoginAttempt;
+            catch(Exception ex){
+                throw new Exception("Card not found: ", ex);
+            }
         }
     }
 }

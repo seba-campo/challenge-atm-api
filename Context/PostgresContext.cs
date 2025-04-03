@@ -84,7 +84,6 @@ public partial class PostgresContext : DbContext
 
             entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.AttemptCount).HasDefaultValue(0);
-            entity.Property(e => e.LastAttempt).HasColumnType("timestamp without time zone");
 
             entity.HasOne(d => d.CardNumberNavigation).WithMany(p => p.FailedLoginAttempts)
                 .HasForeignKey(d => d.CardNumber)
@@ -99,7 +98,9 @@ public partial class PostgresContext : DbContext
             entity.ToTable("Token");
 
             entity.Property(e => e.Id).ValueGeneratedNever();
-            entity.Property(e => e.Token1).HasColumnName("Token");
+            entity.Property(e => e.Token1)
+                .HasColumnType("character varying")
+                .HasColumnName("Token");
 
             entity.HasOne(d => d.Auth).WithMany(p => p.Tokens)
                 .HasForeignKey(d => d.AuthId)

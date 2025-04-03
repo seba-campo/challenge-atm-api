@@ -19,6 +19,7 @@ builder.Services.AddDbContext<PostgresContext>(options =>
 builder.Services.AddScoped<ITransactionTypeService, TransactionTypeService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IFailedLoginAttemptService, FailedLoginAttemptService>();
 
 //Agrego el JWT package
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -30,7 +31,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("keyultrasecreta"))
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("AX,cp+Gf7<])EhIt3?yKA;e]V0[9L30cdGUSjnf,k:tZ0|_M0|%&eKM0L+$wRHD"))
         };
     });
 builder.Services.AddAuthorization();

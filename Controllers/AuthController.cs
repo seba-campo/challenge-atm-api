@@ -1,5 +1,6 @@
 ﻿using ChallengeAtmApi.DTOs;
 using ChallengeAtmApi.Models;
+using ChallengeAtmApi.Security;
 using ChallengeAtmApi.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,17 +18,16 @@ namespace ChallengeAtmApi.Controllers
         {
             _authService = authService;
         }
-        // GET: api/<AuthController>
+        // POST: api/<AuthController>
         [HttpPost]
         public async Task<ActionResult<Boolean>> Login([FromBody] GetAuthDto request)
         {
-            if(await _authService.AuthCardAndPin(request.cardNumber, request.pin))
+            if (await _authService.AuthCardAndPin(request.cardNumber, request.pin))
             {
                 var token = await _authService.LogInUser(request.cardNumber);
                 return Ok(token);
             }
             return Unauthorized("User not authorized.");
         }
-        
     }
 }
