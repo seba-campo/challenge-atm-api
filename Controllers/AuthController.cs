@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ChallengeAtmApi.Controllers
 {
-    [Route("api/auth")]
+    [Route("api/login")]
     [ApiController]
     public class AuthController : ControllerBase
     {
@@ -21,11 +21,12 @@ namespace ChallengeAtmApi.Controllers
         [HttpPost]
         public async Task<ActionResult<Boolean>> Login([FromBody] GetAuthDto request)
         {
-            if(await _authService.AuthCardAndPin(request.cardNumber, request.hashedPin))
+            if(await _authService.AuthCardAndPin(request.cardNumber, request.pin))
             {
-                return Ok(true);
+                var token = await _authService.LogInUser(request.cardNumber);
+                return Ok(token);
             }
-            return BadRequest(false);
+            return Unauthorized("User not authorized.");
         }
         
     }

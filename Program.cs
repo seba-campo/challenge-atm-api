@@ -1,7 +1,10 @@
 using ChallengeAtmApi.Context;
 using ChallengeAtmApi.Services;
 using ChallengeAtmApi.Services.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,9 +17,23 @@ builder.Services.AddDbContext<PostgresContext>(options =>
 
 //Agregar los servicios que se crean para cada Controller:
 builder.Services.AddScoped<ITransactionTypeService, TransactionTypeService>();
+builder.Services.AddScoped<ITokenService, TokenService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 
-
+//Agrego el JWT package
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("keyultrasecreta"))
+        };
+    });
+builder.Services.AddAuthorization();
 
 //Buildear la app
 var app = builder.Build();
@@ -24,11 +41,11 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-// TODO Revisar porque se cuelga el swagger al hacer 1 request...
     app.UseSwaggerUI();
 }
 
 //Middlewares:
+app.UseAuthentication();
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();

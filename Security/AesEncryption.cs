@@ -6,9 +6,9 @@ namespace ChallengeAtmApi.Security
 {
     public class AesEncryption
     {
-        private static readonly byte[] Key = Encoding.UTF8.GetBytes("M@TX3tQe83GPjngb"); // 32 bytes
+        private static readonly byte[] Key = Encoding.UTF8.GetBytes("VaV2dxbTq1Zw2whH5mDkGg=="); // 128 bytes
         private static readonly byte[] IV = Encoding.UTF8.GetBytes("1234567890123456"); // 16 bytes
-
+        
         public static string Encrypt(string text)
         {
             using var aes = Aes.Create();
