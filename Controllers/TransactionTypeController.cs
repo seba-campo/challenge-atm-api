@@ -1,6 +1,7 @@
 ﻿using ChallengeAtmApi.Context;
 using ChallengeAtmApi.Models;
 using ChallengeAtmApi.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics.Eventing.Reader;
@@ -23,6 +24,7 @@ namespace ChallengeAtmApi.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<TransactionType>>> GetTransactionTypes()
         {
             // Obtén todos los registros de la tabla "Auth"
@@ -31,6 +33,7 @@ namespace ChallengeAtmApi.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         public async Task<ActionResult<IEnumerable<TransactionType>>> GetTransactionTypeById(Guid id)
         {
             var transactionType = await _transactionTypeService.GetTransactionTypeById(id);

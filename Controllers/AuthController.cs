@@ -25,7 +25,7 @@ namespace ChallengeAtmApi.Controllers
             if (await _authService.AuthCardAndPin(request.cardNumber, request.pin))
             {
                 var token = await _authService.LogInUser(request.cardNumber);
-                return Ok(token);
+                return Ok(new {acessToken= token});
             }
             return Unauthorized("User not authorized.");
         }
