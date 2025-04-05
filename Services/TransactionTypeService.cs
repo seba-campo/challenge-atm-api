@@ -23,5 +23,6 @@ namespace ChallengeAtmApi.Services
         {
             return await _context.TransactionTypes.FindAsync(id);
         }
+
     }
 }

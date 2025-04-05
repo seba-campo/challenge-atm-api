@@ -34,5 +34,22 @@ namespace ChallengeAtmApi.Services
                 throw new Exception("Ocurrió un error inesperado:", ex);
             }
         }
+
+        public async Task<CardInformation> GetCardInformationAsync(int cardNumber)
+        {
+            try
+            {
+                var cardInfo = await _context.CardInformations.FirstOrDefaultAsync(c => c.CardNumber == cardNumber);
+                if (cardInfo != null)
+                {
+                    return cardInfo;
+                }
+                throw new Exception("Card not found");
+            }
+            catch (Exception ex) {
+                throw new Exception("Error fetching card info: ", ex);
+            }
+        }
+
     }
 }

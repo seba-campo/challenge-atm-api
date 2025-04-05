@@ -4,6 +4,6 @@ namespace ChallengeAtmApi.Services.Interfaces
 {
     public interface ICustomerInformationService
     {
-        Task<CustomerInformation?> GetCustomerInformationAsync();
+        Task<CustomerInformation> GetCustomerByCardNumber(int cardNumber);
     }
 }
