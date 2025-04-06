@@ -46,24 +46,26 @@ namespace ChallengeAtmApi.Services
             }
         }
         //Task<TransactionHistory> DoTransactionTransferAsync(Guid customerId, float ammout, Guid destinationCustomerId);
-        public async Task<TransactionHistory> DoTransactionDepositAsync(Guid customerId, float amount)
+        public async Task<TransactionHistory> DoTransactionDepositAsync(Guid customerId, double amount)
         {
             try
             {
                 var operation = await _customerInformationService.AddAmmountToBalance(customerId, amount);
                 if (operation != null)
                 {
+                    Console.WriteLine("Deposito hecho");
                     var transactionType = await _transactionTypeService.GetTransactionTypeByDescription("deposit");
                     var transaction = new TransactionHistory
                     {
-                        Id = new Guid(),
+                        Id = Guid.NewGuid(),
                         CustomerId = customerId,
                         TransactionTypeId = transactionType.Id,
                         TransactionAmount = amount,
                         RemainingBalance = operation.AccountBalance,
-                        TransactionDateTime = DateTime.UtcNow
+                        TransactionDateTime = DateOnly.FromDateTime(DateTime.UtcNow),
                     };
                     var newTransactionHistory = await _context.TransactionHistories.AddAsync(transaction);
+                    await _context.SaveChangesAsync();
                     return transaction;
                 }
                 else

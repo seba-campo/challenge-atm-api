@@ -48,7 +48,7 @@ namespace ChallengeAtmApi.Services
             }
         }
 
-        public async Task<CustomerInformation> AddAmmountToBalance(Guid id, float amount)
+        public async Task<CustomerInformation> AddAmmountToBalance(Guid id, double amount)
         {
             try
             {

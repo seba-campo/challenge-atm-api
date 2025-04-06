@@ -115,7 +115,6 @@ public partial class PostgresContext : DbContext
             entity.ToTable("TransactionHistory");
 
             entity.Property(e => e.Id).ValueGeneratedNever();
-            entity.Property(e => e.TransactionDateTime).HasColumnType("timestamp without time zone");
 
             entity.HasOne(d => d.Customer).WithMany(p => p.TransactionHistories)
                 .HasForeignKey(d => d.CustomerId)

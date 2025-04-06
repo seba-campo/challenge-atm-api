@@ -15,7 +15,7 @@ public partial class TransactionHistory
 
     public double RemainingBalance { get; set; }
 
-    public DateTime TransactionDateTime { get; set; }
+    public DateOnly TransactionDateTime { get; set; }
 
     public virtual CustomerInformation Customer { get; set; } = null!;
 
