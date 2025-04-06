@@ -1,12 +1,8 @@
-﻿using ChallengeAtmApi.Context;
-using ChallengeAtmApi.Models;
+﻿using ChallengeAtmApi.Models;
 using ChallengeAtmApi.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Diagnostics.Eventing.Reader;
-using System.Reflection.Metadata.Ecma335;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 

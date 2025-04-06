@@ -1,4 +1,5 @@
 ﻿using ChallengeAtmApi.Context;
+using ChallengeAtmApi.DTOs;
 using ChallengeAtmApi.Models;
 using ChallengeAtmApi.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -27,6 +28,50 @@ namespace ChallengeAtmApi.Services
             }
             catch (Exception ex) {
                 throw new Exception("Error fetching customer: ", ex);
+            }
+        }
+
+        public async Task<CustomerInformation> GetCustomerById(Guid id)
+        {
+            try
+            {
+                var customerData = await _context.CustomerInformations.FindAsync(id);
+                if (customerData != null)
+                {
+                    return customerData;
+                }
+                throw new Exception("Customer not found");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error fetching customer: ", ex);
+            }
+        }
+
+        public async Task<CustomerInformation> AddAmmountToBalance(Guid id, float amount)
+        {
+            try
+            {
+                var customer = await GetCustomerById(id);
+                if (customer != null)
+                {
+                    customer.AccountBalance += amount;
+                    _context.CustomerInformations.Update(customer);
+                    await _context.SaveChangesAsync();
+                    var transactionData = new TransactionDepositDto
+                    {
+                        account = customer.Id,
+                        ammountOfDeposit = amount,
+                        balance = customer.AccountBalance
+                    };
+                    return customer;
+                }
+                else
+                {
+                    throw new Exception("Customer not found");
+                }
+            } catch (Exception ex) {
+                throw new Exception("Error while processing the operation", ex);
             }
         }
     }

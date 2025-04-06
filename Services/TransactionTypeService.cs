@@ -24,5 +24,22 @@ namespace ChallengeAtmApi.Services
             return await _context.TransactionTypes.FindAsync(id);
         }
 
+        public async Task<TransactionType?> GetTransactionTypeByDescription(string query)
+        {
+            try
+            {
+                var transacitonType = await _context.TransactionTypes.FirstOrDefaultAsync(t => t.Description == query);
+                if (transacitonType != null)
+                {
+                    return transacitonType;
+                }
+                throw new Exception("The transaction type you tiped does not exist");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error while fetching the desired transaction type: ", ex);
+            }
+        }
+
     }
 }
