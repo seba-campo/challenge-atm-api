@@ -48,7 +48,7 @@ namespace ChallengeAtmApi.Services
             }
         }
 
-        public async Task<CustomerInformation> AddAmmountToBalance(Guid id, double amount)
+        public async Task<CustomerInformation> AddAmmountToAccount(Guid id, double amount)
         {
             try
             {
@@ -58,12 +58,7 @@ namespace ChallengeAtmApi.Services
                     customer.AccountBalance += amount;
                     _context.CustomerInformations.Update(customer);
                     await _context.SaveChangesAsync();
-                    var transactionData = new TransactionDepositDto
-                    {
-                        account = customer.Id,
-                        ammountOfDeposit = amount,
-                        balance = customer.AccountBalance
-                    };
+
                     return customer;
                 }
                 else
@@ -71,6 +66,36 @@ namespace ChallengeAtmApi.Services
                     throw new Exception("Customer not found");
                 }
             } catch (Exception ex) {
+                throw new Exception("Error while processing the operation", ex);
+            }
+        }
+        public async Task<CustomerInformation> WithdrawFromAccount(int cardNumber, double amount)
+        {
+            try
+            {
+                var customer = await GetCustomerByCardNumber(cardNumber);
+                if (customer != null)
+                {
+                    if (amount <= customer.AccountBalance)
+                    {
+                        customer.AccountBalance -= amount;
+                        _context.CustomerInformations.Update(customer);
+                        await _context.SaveChangesAsync();
+
+                        return customer;
+                    }
+                    else
+                    {
+                        throw new Exception("The amount of withdraw is greater than the actual balance of the account.");
+                    }
+                }
+                else
+                {
+                    throw new Exception("Customer not found");
+                }
+            }
+            catch (Exception ex)
+            {
                 throw new Exception("Error while processing the operation", ex);
             }
         }

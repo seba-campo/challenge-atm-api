@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ChallengeAtmApi.Controllers
 {
-    [Route("api/saldo")]
+    [Route("api/[controller]")]
     [ApiController]
     public class BalanceController : Controller
     {
