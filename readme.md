@@ -12,7 +12,7 @@ Se diseñó la base de datos y la aplicación con expectativas de escalabilidad 
  - JwtBearer
 
 **Diagrama entidad relación**
-![ATM (1)](https://github.com/user-attachments/assets/3541a4f7-fc51-4baa-8caa-ab68054b946f)
+![ATM](https://github.com/user-attachments/assets/dd6923a5-9238-4129-9d43-f464194b76db)
 
 
 - Challenge iniciado en la fecha 25/3
