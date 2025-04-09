@@ -6,7 +6,7 @@ namespace ChallengeAtmApi.Services.Interfaces
     {
         Task<CustomerInformation> GetCustomerByCardNumber(int cardNumber);
         Task<CustomerInformation> GetCustomerById(Guid id);
-        Task<CustomerInformation> AddAmmountToAccount(Guid id, double amount);
+        Task<CustomerInformation> AddAmmountToAccountByCard(int cardNumber, double amount);
         Task<CustomerInformation> WithdrawFromAccount(int cardNumber, double amount);
 
     }

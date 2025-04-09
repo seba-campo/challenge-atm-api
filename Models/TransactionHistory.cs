@@ -17,6 +17,10 @@ public partial class TransactionHistory
 
     public DateOnly TransactionDateTime { get; set; }
 
+    public int? CardNumber { get; set; }
+
+    public virtual CardInformation? CardNumberNavigation { get; set; }
+
     public virtual CustomerInformation Customer { get; set; } = null!;
 
     public virtual TransactionType TransactionType { get; set; } = null!;

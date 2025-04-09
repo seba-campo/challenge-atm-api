@@ -1,4 +1,5 @@
 ﻿using ChallengeAtmApi.Models;
+using System.Text.Json.Serialization;
 
 namespace ChallengeAtmApi.DTOs
 {

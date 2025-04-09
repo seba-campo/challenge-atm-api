@@ -25,7 +25,7 @@ namespace ChallengeAtmApi.Services
                 var transaction = await _customerInformationService.WithdrawFromAccount(cardNumber, amount);
                 if (transaction != null)
                 {
-                    var transactionLog = await SaveTransactionLog(transaction.Id, "withdraw", amount, transaction.AccountBalance);
+                    var transactionLog = await SaveTransactionLog(transaction.Id, "withdraw", amount, transaction.AccountBalance, cardNumber);
                     return transactionLog;
                 }
                 else
@@ -57,7 +57,7 @@ namespace ChallengeAtmApi.Services
                     balance = customerInformation.AccountBalance,
                     lastTransaction = lastTransaction
                 };
-                await SaveTransactionLog(customerInformation.Id, "check", 0, customerInformation.AccountBalance);
+                await SaveTransactionLog(customerInformation.Id, "check", 0, customerInformation.AccountBalance, cardNumber);
                 return transactionData;
             }
             catch (Exception ex)
@@ -65,14 +65,15 @@ namespace ChallengeAtmApi.Services
                 throw new Exception("Error while proccessing transaction: ", ex);
             }
         }
-        public async Task<TransactionHistory> DoTransactionDepositAsync(Guid customerId, double amount)
+        public async Task<TransactionHistory> DoTransactionDepositAsync(double amount, int cardNumber)
         {
             try
             {
-                var operation = await _customerInformationService.AddAmmountToAccount(customerId, amount);
+                var operation = await _customerInformationService.AddAmmountToAccountByCard(cardNumber, amount);
                 if (operation != null)
                 {
-                    var transactionLog = await SaveTransactionLog(customerId, "deposit", amount, operation.AccountBalance);
+                    var customer = await _customerInformationService.GetCustomerByCardNumber(cardNumber);
+                    var transactionLog = await SaveTransactionLog(customer.Id, "deposit", amount, operation.AccountBalance, cardNumber);
                     return transactionLog;
                 }
                 else
@@ -90,7 +91,8 @@ namespace ChallengeAtmApi.Services
             Guid customerId,
             string transactionTypeString,
             double amount, 
-            double remainingBalance
+            double remainingBalance,
+            int cardNumber
         )
         {
             try
@@ -102,6 +104,7 @@ namespace ChallengeAtmApi.Services
                     Id = Guid.NewGuid(),
                     CustomerId = customerId,
                     TransactionTypeId = transactionType.Id,
+                    CardNumber = cardNumber,
                     TransactionAmount = amount,
                     RemainingBalance = remainingBalance,
                     TransactionDateTime = DateOnly.FromDateTime(DateTime.UtcNow),
@@ -119,44 +122,40 @@ namespace ChallengeAtmApi.Services
         {
             try
             {
-                var customer = await _customerInformationService.GetCustomerByCardNumber(cardNumber);
-                if (customer != null)
+                var totalOfOperations = await _context.TransactionHistories
+                        .Where(o => o.CardNumber == cardNumber)
+                        .CountAsync();
+
+                var totalOfPages = (int)Math.Ceiling((double)totalOfOperations / pageSize);
+
+                var resultsPaginated = await _context.TransactionHistories
+                        .Where(o => o.CardNumber == cardNumber)  //Filtro por usuario ID
+                        .OrderByDescending(o => o.TransactionDateTime)
+                        .Skip((page - 1) * pageSize)  //Indica los necesarios a saltar, segun el tamaño de la page Gemini
+                        .Take(pageSize)  //Tomo la cantidad indicada en los params
+                        .ToListAsync();
+
+                var responseObject = new TransactionOperationsDto
                 {
-                    var totalOfOperations = await _context.TransactionHistories
-                            .Where(o => o.CustomerId == customer.Id)
-                            .CountAsync();
-
-                    var totalOfPages = (int)Math.Ceiling((double)totalOfOperations / pageSize);
-
-                    var resultsPaginated = await _context.TransactionHistories
-                            .Where(o => o.CustomerId == customer.Id)  //Filtro por usuario ID
-                            .OrderByDescending(o => o.TransactionDateTime)
-                            .Skip((page - 1) * pageSize)  //Indica los necesarios a saltar, segun el tamaño de la page Gemini
-                            .Take(pageSize)  //Tomo la cantidad indicada en los params
-                            .ToListAsync();
-
-                    var responseObject = new TransactionOperationsDto
+                    Operations = resultsPaginated,
+                    Pagination = new PaginationDto
                     {
-                        Operations = resultsPaginated,
-                        Pagination = new PaginationDto
-                        {
-                            totalOperations = totalOfOperations,
-                            totalPages = totalOfPages,
-                            actualPage = page,
-                            paginationSize = pageSize
-                        }
-                    };
+                        totalOperations = totalOfOperations,
+                        totalPages = totalOfPages,
+                        actualPage = page,
+                        paginationSize = pageSize
+                    }
+                };
 
-                    return responseObject;
-                }
-                else
-                {
-                    throw new Exception("User not found");
-                }
+                return responseObject;
             }
             catch (Exception ex) { 
                 throw new Exception("Error while proccessing transaction: ", ex);
             } 
         }
+        //private Task<List<TransactionHistory>> FormatTransactions(IEnumerable<TransactionHistory> transactions)
+        //{
+
+        //} 
     } 
 }

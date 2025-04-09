@@ -22,6 +22,7 @@ namespace ChallengeAtmApi.Services
                     .FirstOrDefaultAsync(c => c.CardInformations.Any(card => card.CardNumber == cardNumber));
                 if (customerData != null)
                 {
+                    Console.WriteLine(customerData);
                     return customerData;
                 }
                 throw new Exception("Not customer found for this card.");
@@ -48,11 +49,11 @@ namespace ChallengeAtmApi.Services
             }
         }
 
-        public async Task<CustomerInformation> AddAmmountToAccount(Guid id, double amount)
+        public async Task<CustomerInformation> AddAmmountToAccountByCard(int cardNumber, double amount)
         {
             try
             {
-                var customer = await GetCustomerById(id);
+                var customer = await GetCustomerByCardNumber(cardNumber);
                 if (customer != null)
                 {
                     customer.AccountBalance += amount;

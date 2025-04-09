@@ -1,4 +1,5 @@
 ﻿using ChallengeAtmApi.DTOs;
+using ChallengeAtmApi.Models;
 using ChallengeAtmApi.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -22,11 +23,11 @@ paginada (páginas de 10 registros
         */
         [HttpGet("{cardNumber}")]
         [Authorize]
-        public async Task<ActionResult<TransactionOperationsDto>> CheckOperations([FromBody] OperationsRequestDto req)
+        public async Task<ActionResult<TransactionOperationsDto>> CheckOperations(int cardNumber)
         {
             try
             {
-                var operationsResponse = await _transactionHistoryService.DoCheckOpertaionsAsync(req.cardNumber);
+                var operationsResponse = await _transactionHistoryService.DoCheckOpertaionsAsync(cardNumber , 1);
                 if (operationsResponse != null)
                 {
                     return Ok(operationsResponse);

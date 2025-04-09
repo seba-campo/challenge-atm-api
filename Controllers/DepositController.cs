@@ -21,7 +21,7 @@ namespace ChallengeAtmApi.Controllers
         {
             try
             {
-                var transaction = await _transactionHistoryService.DoTransactionDepositAsync(body.account, body.ammountOfDeposit);
+                var transaction = await _transactionHistoryService.DoTransactionDepositAsync(body.ammountOfDeposit, body.cardNumber);
                 if (transaction != null)
                 {
                     return Ok(new { success = "El deposito se realizó con exito" });

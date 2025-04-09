@@ -16,4 +16,6 @@ public partial class CardInformation
     public virtual CustomerInformation Customer { get; set; } = null!;
 
     public virtual ICollection<FailedLoginAttempt> FailedLoginAttempts { get; set; } = new List<FailedLoginAttempt>();
+
+    public virtual ICollection<TransactionHistory> TransactionHistories { get; set; } = new List<TransactionHistory>();
 }

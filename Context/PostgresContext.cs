@@ -116,6 +116,10 @@ public partial class PostgresContext : DbContext
 
             entity.Property(e => e.Id).ValueGeneratedNever();
 
+            entity.HasOne(d => d.CardNumberNavigation).WithMany(p => p.TransactionHistories)
+                .HasForeignKey(d => d.CardNumber)
+                .HasConstraintName("TransactionHistory_CardNumber_fkey");
+
             entity.HasOne(d => d.Customer).WithMany(p => p.TransactionHistories)
                 .HasForeignKey(d => d.CustomerId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
