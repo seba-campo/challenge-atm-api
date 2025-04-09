@@ -8,5 +8,6 @@ namespace ChallengeAtmApi.Services.Interfaces
         Task<TransactionHistory> DoTransactionWithdrawAsync(int cardNumber, float amount);
         Task<TransactionCheckDto> DoTransactionCheckAsync(int cardNumber);
         Task<TransactionHistory> DoTransactionDepositAsync(Guid customerId, double ammount);
+        Task<TransactionOperationsDto> DoCheckOpertaionsAsync(int cardNumber);
     }
 }

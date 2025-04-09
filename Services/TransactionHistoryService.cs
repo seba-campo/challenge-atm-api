@@ -11,6 +11,7 @@ namespace ChallengeAtmApi.Services
         private readonly PostgresContext _context;
         private readonly ICustomerInformationService _customerInformationService;
         private readonly ITransactionTypeService _transactionTypeService;
+        private readonly int pageSize = 10;
         public TransactionHistoryService(PostgresContext context, ICustomerInformationService customerInformationService, ITransactionTypeService transactionTypeService)
         {
             _context = context;
@@ -113,6 +114,49 @@ namespace ChallengeAtmApi.Services
             {
                 throw new Exception("Error while saving transaction log", ex);
             }
+        }
+        public async Task<TransactionOperationsDto> DoCheckOpertaionsAsync(int cardNumber, int page)
+        {
+            try
+            {
+                var customer = await _customerInformationService.GetCustomerByCardNumber(cardNumber);
+                if (customer != null)
+                {
+                    var totalOfOperations = await _context.TransactionHistories
+                            .Where(o => o.CustomerId == customer.Id)
+                            .CountAsync();
+
+                    var totalOfPages = (int)Math.Ceiling((double)totalOfOperations / pageSize);
+
+                    var resultsPaginated = await _context.TransactionHistories
+                            .Where(o => o.CustomerId == customer.Id)  //Filtro por usuario ID
+                            .OrderByDescending(o => o.TransactionDateTime)
+                            .Skip((page - 1) * pageSize)  //Indica los necesarios a saltar, segun el tamaño de la page Gemini
+                            .Take(pageSize)  //Tomo la cantidad indicada en los params
+                            .ToListAsync();
+
+                    var responseObject = new TransactionOperationsDto
+                    {
+                        Operations = resultsPaginated,
+                        Pagination = new PaginationDto
+                        {
+                            totalOperations = totalOfOperations,
+                            totalPages = totalOfPages,
+                            actualPage = page,
+                            paginationSize = pageSize
+                        }
+                    };
+
+                    return responseObject;
+                }
+                else
+                {
+                    throw new Exception("User not found");
+                }
+            }
+            catch (Exception ex) { 
+                throw new Exception("Error while proccessing transaction: ", ex);
+            } 
         }
     } 
 }
