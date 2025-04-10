@@ -1,6 +1,7 @@
-﻿# Challenge ATM
-El challenge fué encarado con la intención de utilizar DDD como patrón de diseño principal. 
-Se obvió la creación de una base de datos local para correr en Docker, en su reemplazo se utilizó un SaaS (supabase) donde se aloja la DB del proyecto. 
+﻿
+# Challenge ATM
+Arquitectura principal: Layered Architecture
+Se obvió la creación de una base de datos local para correr en Docker, en su reemplazo se utilizó un SaaS (neon.tech) donde se aloja la DB del proyecto. 
 
 Se diseñó la base de datos y la aplicación con expectativas de escalabilidad y performance. 
 
