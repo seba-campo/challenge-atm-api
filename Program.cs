@@ -1,6 +1,6 @@
-using ChallengeAtmApi.Context;
-using ChallengeAtmApi.Services;
-using ChallengeAtmApi.Services.Interfaces;
+using ChallengeAtmApi.Application.Services;
+using ChallengeAtmApi.Application.Services.Interfaces;
+using ChallengeAtmApi.Infrastructure.Context;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
