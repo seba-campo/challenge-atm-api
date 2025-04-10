@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ChallengeAtmApi.API.Controllers
 {
-    [Route("api/transaction-type")]
+    [Route("api/Transaction-type")]
     [ApiController]
     public class TransactionTypeController : ControllerBase
     {

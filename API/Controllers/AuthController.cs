@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ChallengeAtmApi.API.Controllers
 {
-    [Route("api/login")]
+    [Route("api/Login")]
     [ApiController]
     public class AuthController : ControllerBase
     {
