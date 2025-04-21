@@ -7,6 +7,7 @@ namespace ChallengeAtmApi.Infrastructure.Context;
 
 public partial class PostgresContext : DbContext
 {
+
     public PostgresContext()
     {
     }
@@ -31,8 +32,16 @@ public partial class PostgresContext : DbContext
     public virtual DbSet<TransactionType> TransactionTypes { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseNpgsql("Host=ep-dark-art-acslsu38.sa-east-1.aws.neon.tech;Port=5432;Database=atm-challenge;Username=atm-challenge_owner;Password=npg_NGtbsdwH94VS;SSL Mode=Require;Trust Server Certificate=true");
+    {
+        var host = Environment.GetEnvironmentVariable("DB_HOST");
+        var port = Environment.GetEnvironmentVariable("DB_PORT");
+        var database = Environment.GetEnvironmentVariable("DB_NAME");
+        var username = Environment.GetEnvironmentVariable("DB_USER");
+        var password = Environment.GetEnvironmentVariable("DB_PASSWORD");
+        var connectionString = $"Host={host};Port={port};Database={database};Username={username};Password={password};SSL Mode=Require;Trust Server Certificate=true";
+
+        optionsBuilder.UseNpgsql(connectionString);
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

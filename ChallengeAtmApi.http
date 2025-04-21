@@ -1,6 +1,4 @@
 @ChallengeAtmApi_HostAddress = http://localhost:5206
 
-GET {{ChallengeAtmApi_HostAddress}}/weatherforecast/
+GET {{ChallengeAtmApi_HostAddress}}/atmapi/
 Accept: application/json
-
-###

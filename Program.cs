@@ -5,9 +5,18 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Security.Cryptography;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var host = Environment.GetEnvironmentVariable("DB_HOST");
+var port = Environment.GetEnvironmentVariable("DB_PORT");
+var database = Environment.GetEnvironmentVariable("DB_NAME");
+var username = Environment.GetEnvironmentVariable("DB_USER");
+var password = Environment.GetEnvironmentVariable("DB_PASSWORD");
+var connectionString = $"Host={host};Port={port};Database={database};Username={username};Password={password};SSL Mode=Require;Trust Server Certificate=true";
+
 
 // Agregar los servicios:
 builder.Services.AddControllers();
@@ -15,7 +24,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
     //Codigo generado en Gemini para la configuración de requerimiento de token.
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "Tu API", Version = "v1" });
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "ATM API", Version = "v1" });
 
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
@@ -40,8 +49,9 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 }); ;
+
 builder.Services.AddDbContext<PostgresContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseNpgsql(connectionString));
 
 //Agregar los servicios que se crean para cada Controller:
 builder.Services.AddScoped<ITransactionTypeService, TransactionTypeService>();
