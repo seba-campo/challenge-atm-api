@@ -7,7 +7,7 @@ namespace ChallengeAtmApi.Infrastructure.Security
 {
     public class AesEncryption
     {
-        //private static readonly byte[] Key = Encoding.UTF8.GetBytes("VaV2dxbTq1Zw2whH5mDkGg=="); // 128 bytes
+        // 128 bytes
         private static readonly byte[] Key = Convert.FromBase64String("VaV2dxbTq1Zw2whH5mDkGg==");
         private static readonly byte[] IV = Encoding.UTF8.GetBytes("1234567890123456"); // 16 bytes
 

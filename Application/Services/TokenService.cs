@@ -23,6 +23,7 @@ namespace ChallengeAtmApi.Application.Services
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
+            //Esta key debería estar en una variable de entorno.
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("AX,cp+Gf7<])EhIt3?yKA;e]V0[9L30cdGUSjnf,k:tZ0|_M0|%&eKM0L+$wRHD"));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
