@@ -1,11 +1,10 @@
-using ChallengeAtmApi.Application.Services;
-using ChallengeAtmApi.Application.Services.Interfaces;
+using ChallengeAtmApi.Applications.Services;
+using ChallengeAtmApi.Applications.Services.Interfaces;
 using ChallengeAtmApi.Infrastructure.Context;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using System.Security.Cryptography;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -72,8 +71,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            ValidAudience= "atm-api",
-            ValidIssuer= "atm-api",
+            ValidAudience = "atm-api",
+            ValidIssuer = "atm-api",
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("AX,cp+Gf7<])EhIt3?yKA;e]V0[9L30cdGUSjnf,k:tZ0|_M0|%&eKM0L+$wRHD"))
         };
     });

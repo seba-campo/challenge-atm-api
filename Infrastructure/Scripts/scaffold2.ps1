@@ -1,1 +1,0 @@
-﻿dotnet ef dbcontext scaffold "Host=db.aotmrixxmjijoehpxfop.supabase.co;Port=5432;Database=postgres;Username=postgres;Password=Agy1GfZYileyAxNK;SSL Mode=Require;Trust Server Certificate=true" Npgsql.EntityFrameworkCore.PostgreSQL -o ./Models -c PostgresContext --schema public --context-dir ./Context --force

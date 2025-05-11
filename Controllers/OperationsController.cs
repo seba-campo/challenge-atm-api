@@ -1,11 +1,9 @@
-﻿using ChallengeAtmApi.Application.Services.Interfaces;
-using ChallengeAtmApi.Core.DTOs;
-using ChallengeAtmApi.Core.Models;
+﻿using ChallengeAtmApi.Applications.Services.Interfaces;
+using ChallengeAtmApi.Domain.DTOs;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ChallengeAtmApi.API.Controllers
+namespace ChallengeAtmApi.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

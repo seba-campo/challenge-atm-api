@@ -1,12 +1,12 @@
-﻿using ChallengeAtmApi.Application.Services.Interfaces;
-using ChallengeAtmApi.Core.Models;
+﻿using ChallengeAtmApi.Applications.Services.Interfaces;
+using ChallengeAtmApi.Domain.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
-namespace ChallengeAtmApi.API.Controllers
+namespace ChallengeAtmApi.Api.Controllers
 {
     [Route("api/Transaction-type")]
     [ApiController]
