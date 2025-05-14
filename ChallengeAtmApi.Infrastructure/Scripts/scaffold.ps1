@@ -1,0 +1,1 @@
+﻿dotnet ef dbcontext scaffold "Host=ep-dark-art-acslsu38.sa-east-1.aws.neon.tech;Port=5432;Database=atm-challenge;Username=atm-challenge_owner;Password=npg_NGtbsdwH94VS;SSL Mode=Require;Trust Server Certificate=true" Npgsql.EntityFrameworkCore.PostgreSQL -o ./Models -c PostgresContext --schema public --context-dir ./Context --force
